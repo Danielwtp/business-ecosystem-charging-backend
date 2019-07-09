@@ -12,7 +12,7 @@ pip3 install https://github.com/django-nonrel/mongodb-engine/archive/master.zip
 
 pip3 install "nose==1.3.6" "django-nose==1.4"
 # pip install "django-crontab==0.6.0"
-pip3 install "sched==0.6.0"
+pip3 install "schedule==0.6.0"
 pip3 install requests
 pip3 install requests[security]
 pip3 install regex

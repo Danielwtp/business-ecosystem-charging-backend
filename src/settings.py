@@ -20,7 +20,10 @@
 
 
 
-from os import path, environ ,schedule
+from os import path, environ
+import  schedule
+
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -179,10 +182,19 @@ AUTHENTICATION_BACKENDS = (
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Daily job that checks pending pay-per-use charges
-    schedule.every().day.at("05:00").do(django.core.management.call_command(pending_charges_daemon))
-    schedule.every().day.at("06:00").do(django.core.management.call_command(resend_cdrs))
-    schedule.every().day.at("04:00").do(django.core.management.call_command(resend_upgrade))
-    schedule.run_pending()
+def ccomando(a):
+    from django.core.management import call_command
+    if a==1:
+        call_command('pending_charges_daemon')
+    if a==2:
+        call_command('resend_cdrs')
+    if a==3:
+        call_command('resend_upgrade')
+
+schedule.every().day.at("05:00").do(ccomando(1))
+schedule.every().day.at("06:00").do(ccomando(2))
+schedule.every().day.at("04:00").do(ccomando(3))
+schedule.run_pending()
 
 CLIENTS = {
     'paypal': 'wstore.charging_engine.payment_client.paypal_client.PayPalClient',
@@ -193,7 +205,7 @@ CLIENTS = {
 NOTIF_CERT_FILE = None
 NOTIF_CERT_KEY_FILE = None
 
-from .services_settings import *
+from services_settings import *
 
 # =====================================
 # ENVIRONMENT SETTINGS
