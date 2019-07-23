@@ -21,6 +21,7 @@
 
 
 from os import path, environ
+from django.core.management import call_command
 import  schedule
 
 
@@ -28,7 +29,8 @@ import  schedule
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -48,7 +50,8 @@ DATABASES = {
     }
 }
 
-BASEDIR = path.dirname(path.abspath(__file__))
+#BASEDIR = path.dirname(path.abspath(__file__))
+BASEDIR = path.dirname(path.dirname(path.abspath(__file__)))
 
 STORE_NAME = 'WStore'
 AUTH_PROFILE_MODULE = 'wstore.models.UserProfile'
@@ -102,19 +105,40 @@ BILL_ROOT = path.join(MEDIA_ROOT, 'bills')
 # URL that handles the media served from MEDIA_ROOT.
 MEDIA_URL = '/charging/media/'
 
-INSTALLED_APPS = (
+#INSTALLED_APPS = (
+#    'django.contrib.auth',
+#    'django.contrib.contenttypes',
+#    'django.contrib.sessions',
+#    'django.contrib.messages',
+#    'django.contrib.admin',
+#    'django_mongodb_engine',
+#    'djangotoolbox',
+#    'wstore',
+#    'wstore.store_commons',
+#    'wstore.charging_engine',
+#    'django_nose'
+#)
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.admin',
-    'django_mongodb_engine',
-    'djangotoolbox',
-    'wstore',
-    'wstore.store_commons',
-    'wstore.charging_engine',
-    'django_nose'
-)
+    'django.contrib.staticfiles',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '8p509oqr^68+z)y48_*pv!ceun)gu7)yw6%y9j2^0=o14)jetr'
@@ -134,9 +158,9 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
-    'wstore.store_commons.middleware.URLMiddleware',
-)
+#MIDDLEWARE_CLASSES = (
+#    'wstore.store_commons.middleware.URLMiddleware',
+#)
 
 WSTOREMAILUSER = 'email_user'
 WSTOREMAIL = 'wstore@email.com'
@@ -183,13 +207,13 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Daily job that checks pending pay-per-use charges
 def ccomando(a):
-    from django.core.management import call_command
     if a==1:
         call_command('pending_charges_daemon')
     if a==2:
         call_command('resend_cdrs')
-    if a==3:
+    else:
         call_command('resend_upgrade')
+
 
 schedule.every().day.at("05:00").do(ccomando(1))
 schedule.every().day.at("06:00").do(ccomando(2))

@@ -21,12 +21,12 @@
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 
-from . import wstore.urls
-from .wstore.views import ServeMedia
+import wstore.urls
+from wstore.views import ServeMedia
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = path('',
    url(r'^charging/media/(?P<path>.+)/(?P<name>[\w -.]+)/?$', ServeMedia(permitted_methods=('GET',)))
 )
 
