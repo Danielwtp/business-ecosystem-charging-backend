@@ -26,7 +26,7 @@ from wstore.views import ServeMedia
 
 admin.autodiscover()
 
-urlpatterns = path('',
+urlpatterns = patterns('',
    url(r'^charging/media/(?P<path>.+)/(?P<name>[\w -.]+)/?$', ServeMedia(permitted_methods=('GET',)))
 )
 

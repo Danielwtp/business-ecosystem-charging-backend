@@ -38,8 +38,9 @@ fi
 if [[ $DIST ==  "deb" ]]; then
     # Debian/Ubuntu
     echo "Debian/Ubuntu system"
+    sudo add-apt-repository ppa:deadsnakes/ppa#python3.6
     apt-get update
-    apt-get install python python-pip
+    apt-get install python3.6 python3-pip
     apt-get install mongodb
     apt-get install wkhtmltopdf
     apt-get install xvfb
@@ -80,8 +81,8 @@ elif [[  $DIST == "rhel" ]]; then
         sudo /usr/local/bin/python3.5 ez_setup.py
         sudo /usr/local/bin/easy_install-3.5 pip3
 
-        ln -s /usr/local/bin/python3.5 /usr/bin/python3
-        ln -s /usr/local/bin/pip3.5 /usr/bin/pip3
+        ln -s /usr/local/bin/python3.6 /usr/bin/python3
+        ln -s /usr/local/bin/pip3.6 /usr/bin/pip3
     else
         rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
         yum -y update

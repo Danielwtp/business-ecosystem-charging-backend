@@ -2,9 +2,9 @@
 
 trap 'exit' ERR
 
-pip install "coverage==4.0.3"
-pip install "mock==1.0.1"
-pip install "nose-parameterized==0.5.0"
+pip3 install "coverage==4.5.3"
+pip3 install "mock==3.0.5"
+pip3 install "nose-parameterized==0.6.0"
 
 cd $WORKSPACE/src
 

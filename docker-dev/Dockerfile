@@ -1,9 +1,9 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 MAINTAINER CoNWeT Lab. Universidad Politécnica de Madrid
 
 RUN apt-get update && apt-get install -y --fix-missing \
-    gcc git wkhtmltopdf xvfb python3.5 python3-pip \
+    gcc git wkhtmltopdf xvfb python3.6 python3-pip \
     python-dev build-essential libssl-dev libffi-dev \
     apache2 libapache2-mod-wsgi && \
     pip3 install sh && \

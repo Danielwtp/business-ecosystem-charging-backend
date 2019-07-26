@@ -22,7 +22,7 @@
 
 from os import path, environ
 from django.core.management import call_command
-import  schedule
+import schedule
 
 
 
@@ -40,7 +40,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_mongodb_engine',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'djongo',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'wstore_db',           # Or path to database file if using sqlite3.
         'USER': '',                         # Not used with sqlite3.
         'PASSWORD': '',                     # Not used with sqlite3.
@@ -121,11 +121,16 @@ MEDIA_URL = '/charging/media/'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    #'djangotoolbox',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'wstore',
+    'wstore.store_commons',
+    'wstore.charging_engine',
+    'django_nose'
 ]
 
 MIDDLEWARE = [
@@ -135,32 +140,47 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
+]
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '8p509oqr^68+z)y48_*pv!ceun)gu7)yw6%y9j2^0=o14)jetr'
+SECRET_KEY = '&!&=01o$^gg1%c_4b4cvmdowtvv$0go4tt0d#%xwk0xag@(d%p'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.request',
-    'django.core.context_processors.static',
-)
+#TEMPLATE_CONTEXT_PROCESSORS = (
+#    'django.contrib.auth.context_processors.auth',
+#    'django.core.context_processors.debug',
+#    'django.core.context_processors.i18n',
+#    'django.core.context_processors.media',
+#    'django.core.context_processors.request',
+#    'django.core.context_processors.static',
+#)
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
-#MIDDLEWARE_CLASSES = (
-#    'wstore.store_commons.middleware.URLMiddleware',
+#TEMPLATE_LOADERS = (
+#    'django.template.loaders.filesystem.Loader',
+#    'django.template.loaders.app_directories.Loader',
 #)
+
+MIDDLEWARE_CLASSES = (
+  'wstore.store_commons.middleware.URLMiddleware',
+)
 
 WSTOREMAILUSER = 'email_user'
 WSTOREMAIL = 'wstore@email.com'
@@ -207,18 +227,14 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Daily job that checks pending pay-per-use charges
 def ccomando(a):
-    if a==1:
-        call_command('pending_charges_daemon')
     if a==2:
         call_command('resend_cdrs')
     else:
         call_command('resend_upgrade')
 
-
-schedule.every().day.at("05:00").do(ccomando(1))
-schedule.every().day.at("06:00").do(ccomando(2))
-schedule.every().day.at("04:00").do(ccomando(3))
-schedule.run_pending()
+#schedule.every().day.at("06:00").do(ccomando(2))
+#schedule.every().day.at("04:00").do(ccomando(3))
+#schedule.run_pending()
 
 CLIENTS = {
     'paypal': 'wstore.charging_engine.payment_client.paypal_client.PayPalClient',
